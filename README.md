@@ -1,6 +1,6 @@
 # 🎄 Advent Of Code 2025
 
-![rust logo][rust-badge] ![verilog logo][verilog-badge]
+![rust logo][rust-badge] ![veryl logo][veryl-badge]
 
 My solutions for the [Advent of Code 2025][advent-of-code] challenges.
 
@@ -10,14 +10,14 @@ I'm interested in exploring how well certain problems can be mapped into a simpl
 
 Certain types of problems may lend themselves well to hardware implementation by taking advantage of parallelism (e.g. day 2, repeating patterns could be detected in a single cycle), while others may be inherently sequential with complex mathematical operations that a CPU is designed to handle very efficiently.
 
-The hardware implementation is designed to solve the second part of each day's challenge. The benchmark uses the same full input as the software solution. Each hardware solution is structured as a simple streaming pipeline that processes the input data one byte at a time, applying backpressure when necessary to handle variable processing times. The simulation time (from first byte to correct answer) is simulated at 1 GHz to give an idea of how fast the design _could maybe run_ on real hardware.
+The hardware implementation is designed to solve the **second part** of each day's challenge. The benchmark uses the same full input as the software solution. Each hardware solution is structured as a simple streaming pipeline that processes the input data one byte at a time, applying backpressure when necessary to handle variable processing times. The simulation time (from first byte to correct answer) is **simulated at 1 GHz** to give an idea of how fast the design _could maybe run_ on real hardware.
 
 <div align="center">
 
 |      Day | Name            | Source       | Part 1 | Part 2 |   Time 1 |  Time 2 |     | Veryl       | Sim. t. |
 | -------: | --------------- | ------------ | :----: | :----: | -------: | ------: | --- | ----------- | ------: |
 | [1][p01] | Secret Entrance | [01.rs][s01] |   ⭐   |   ⭐   |   35.7µs | 926.8µs | 🌱  | [01.v][v01] |  595 µs |
-| [2][p02] | Gift Shop       | [02.rs][s02] |   ⭐   |   ⭐   | 204.4 µs |  7.5 ms | ⚡  |             |         |
+| [2][p02] | Gift Shop       | [02.rs][s02] |   ⭐   |   ⭐   | 204.4 µs |  7.5 ms | ⚡  | [02.v][v02] | 2.09 ms |
 | [3][p03] | Lobby           | [03.rs][s03] |   ⭐   |   ⭐   |    5.4µs | 22.9 µs | ⚡  |             |         |
 |          | ...             |              |        |        |          |         |     |             |         |
 
@@ -59,7 +59,7 @@ This repository uses a modified version of [this template][template]. Thanks Fel
 Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 
 [rust-badge]: https://img.shields.io/badge/Rust-d55826?logo=rust&style=for-the-badge
-[verilog-badge]: https://img.shields.io/badge/Verilog-b7b8f3?style=for-the-badge
+[veryl-badge]: https://img.shields.io/badge/Veryl-b7b8f3?style=for-the-badge
 [advent-of-code]: https://adventofcode.com/
 [rust]: https://www.rust-lang.org/
 [veryl]: https://veryl-lang.org/
@@ -70,4 +70,5 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [s01]: src/bin/01.rs
 [s02]: src/bin/02.rs
 [s03]: src/bin/03.rs
-[v01]: verilog/01.veryl
+[v01]: hardware/01.veryl
+[v02]: hardware/02.veryl

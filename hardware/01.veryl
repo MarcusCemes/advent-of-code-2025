@@ -1,11 +1,11 @@
-pub module Day01 (
+pub module Day01 for ProtoAocSolution (
     clk: input clock,
     rst: input reset,
 
     i_data : input logic<8>,
     i_valid: input logic   ,
 
-    o_answer: output logic<32>,
+    o_answer: output logic<64>,
     o_busy  : output logic    ,
     o_valid : output logic    ,
 ) {
@@ -129,11 +129,11 @@ module Day01Solver (
     i_right: input logic    ,
     i_valid: input logic    ,
 
-    o_answer: output logic<32>,
+    o_answer: output logic<64>,
     o_busy  : output logic    ,
     o_valid : output logic    ,
 ) {
-    var answer: logic<32>;
+    var answer: logic<64>;
     var count : logic<32>;
     var right : logic    ;
     var state : logic<32>;
@@ -152,15 +152,15 @@ module Day01Solver (
                 if right {
                     // Logic for "Right"
                     if state == 99 {
-                        answer = answer + 1;
-                        state  = 0;
+                        answer += 1;
+                        state  =  0;
                     } else {
                         state = state + 1;
                     }
                 } else {
                     // Logic for "Left" (Not Right)
                     if state == 1 {
-                        answer = answer + 1;
+                        answer += 1;
                     }
 
                     if state == 0 {
