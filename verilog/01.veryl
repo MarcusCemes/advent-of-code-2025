@@ -1,0 +1,184 @@
+pub module Day01 (
+    clk: input clock,
+    rst: input reset,
+
+    i_data : input logic<8>,
+    i_valid: input logic   ,
+
+    o_answer: output logic<32>,
+    o_busy  : output logic    ,
+    o_valid : output logic    ,
+) {
+    // Internal signals
+    var count: logic<32>;
+    var right: logic    ;
+
+    // Control signals (between decoder and solver)
+    var decoder_valid: logic;
+    var solver_busy  : logic;
+    var solver_valid : logic;
+
+    inst decoder: Day01Decoder (
+        clk                   ,
+        rst                   ,
+        i_busy : solver_busy  ,
+        i_data                ,
+        i_valid               ,
+        o_busy                ,
+        o_count: count        ,
+        o_right: right        ,
+        o_valid: decoder_valid,
+    );
+
+    inst solver: Day01Solver (
+        clk                    ,
+        rst                    ,
+        i_count : count        ,
+        i_right : right        ,
+        i_valid : decoder_valid,
+        o_answer               ,
+        o_busy  : solver_busy  ,
+        o_valid : solver_valid ,
+    );
+
+    assign o_valid = solver_valid && !decoder_valid && !i_valid;
+}
+
+module Day01Decoder (
+    clk: input clock,
+    rst: input reset,
+
+    i_busy : input logic   ,
+    i_data : input logic<8>,
+    i_valid: input logic   ,
+
+    o_busy : output logic    ,
+    o_count: output logic<32>,
+    o_right: output logic    ,
+    o_valid: output logic    ,
+) {
+    enum State: logic<2> {
+        Search,
+        Parse,
+        Finish,
+    }
+
+    var state: State    ;
+    var count: logic<32>;
+    var right: logic    ;
+    var valid: logic    ;
+    var busy : logic    ;
+
+    always_ff {
+        if_reset {
+            state = State::Search;
+            count = 0;
+            right = 0;
+            valid = 0;
+            busy  = 0;
+        } else {
+            case state {
+                State::Search: {
+                    if i_valid {
+                        right = (i_data == 8'h52); // 'R'
+                        state = State::Parse;
+                    }
+                }
+
+                State::Parse: {
+                    if i_valid {
+                        switch {
+                            i_data == 8'h0A: { // '\n'
+                                busy  = 1;
+                                valid = 1;
+                                state = State::Finish;
+                            }
+
+                            i_data >= 8'h30 && i_data <= 8'h39: {
+                                count = (count * 10) + {24'0, (i_data - 8'h30)};
+                            }
+                        }
+                    }
+                }
+
+                State::Finish: {
+                    if !i_busy {
+                        busy  = 0;
+                        count = 0;
+                        valid = 0;
+                        state = State::Search;
+                    }
+                }
+
+                default: {}
+            }
+        }
+    }
+
+    assign o_busy  = busy;
+    assign o_count = count;
+    assign o_right = right;
+    assign o_valid = valid;
+}
+
+module Day01Solver (
+    clk: input clock,
+    rst: input reset,
+
+    i_count: input logic<32>,
+    i_right: input logic    ,
+    i_valid: input logic    ,
+
+    o_answer: output logic<32>,
+    o_busy  : output logic    ,
+    o_valid : output logic    ,
+) {
+    var answer: logic<32>;
+    var count : logic<32>;
+    var right : logic    ;
+    var state : logic<32>;
+
+    always_ff {
+        if_reset {
+            answer = 0;
+            count  = 0;
+            right  = 0;
+            state  = 50;
+        } else {
+            // Priority 1: If we are busy processing (count > 0)
+            if count != 0 {
+                count = count - 1;
+
+                if right {
+                    // Logic for "Right"
+                    if state == 99 {
+                        answer = answer + 1;
+                        state  = 0;
+                    } else {
+                        state = state + 1;
+                    }
+                } else {
+                    // Logic for "Left" (Not Right)
+                    if state == 1 {
+                        answer = answer + 1;
+                    }
+
+                    if state == 0 {
+                        state = 99;
+                    } else {
+                        state = state - 1;
+                    }
+                }
+
+                // Priority 2: Load new data if valid
+            } else if i_valid {
+                count = i_count;
+                right = i_right;
+            }
+        }
+    }
+
+    assign o_answer = answer;
+    assign o_busy   = count != 0;
+    assign o_valid  = !o_busy;
+}
