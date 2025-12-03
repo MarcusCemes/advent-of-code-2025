@@ -14,12 +14,12 @@ The hardware implementation is designed to solve the **second part** of each day
 
 <div align="center">
 
-|      Day | Name            | Source       | Part 1 | Part 2 |   Time 1 |  Time 2 |     | Veryl       | Sim. t. |
-| -------: | --------------- | ------------ | :----: | :----: | -------: | ------: | --- | ----------- | ------: |
-| [1][p01] | Secret Entrance | [01.rs][s01] |   ⭐   |   ⭐   |   35.7µs | 926.8µs | 🌱  | [01.v][v01] |  595 µs |
-| [2][p02] | Gift Shop       | [02.rs][s02] |   ⭐   |   ⭐   | 204.4 µs |  7.5 ms | ⚡  | [02.v][v02] | 2.09 ms |
-| [3][p03] | Lobby           | [03.rs][s03] |   ⭐   |   ⭐   |    5.4µs | 22.9 µs | ⚡  |             |         |
-|          | ...             |              |        |        |          |         |     |             |         |
+|      Day | Name            | Source       | Part 1 | Part 2 |   Time 1 |  Time 2 |     | Veryl       | Sim. (1 GHz) |
+| -------: | --------------- | ------------ | :----: | :----: | -------: | ------: | --- | ----------- | -----------: |
+| [1][p01] | Secret Entrance | [01.rs][s01] |   ⭐   |   ⭐   |   35.7µs | 926.8µs | 🌱  | [01.v][v01] |       595 µs |
+| [2][p02] | Gift Shop       | [02.rs][s02] |   ⭐   |   ⭐   | 204.4 µs |  7.5 ms | ⚡  | [02.v][v02] |      2.09 ms |
+| [3][p03] | Lobby           | [03.rs][s03] |   ⭐   |   ⭐   |    5.4µs | 22.9 µs | ⚡  | [03.v][v03] |      20.4 µs |
+|          | ...             |              |        |        |          |         |     |             |              |
 
 **Key:** &nbsp;&nbsp; ⭐ Completed &nbsp;&nbsp; 🎁 In progress &nbsp;&nbsp; 😔 Gave up &nbsp;&nbsp; | &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
 
@@ -72,3 +72,4 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [s03]: src/bin/03.rs
 [v01]: hardware/01.veryl
 [v02]: hardware/02.veryl
+[v03]: hardware/03.veryl
