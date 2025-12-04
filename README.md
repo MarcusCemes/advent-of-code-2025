@@ -14,13 +14,13 @@ The hardware implementation is designed to solve the **second part** of each day
 
 <div align="center">
 
-|      Day | Name                |   Rust    | Opt. |   Veryl   | Rust (1) | Rust (2) | Veryl (1 GHz) |
-| -------: | ------------------- | :-------: | :--: | :-------: | -------: | -------: | ------------: |
-| [1][p01] | Secret Entrance     | [01][s01] |  🌱  | [01][v01] |   35.7µs |    927µs |        595 µs |
-| [2][p02] | Gift Shop           | [02][s02] |  ⚡  | [02][v02] |   204 µs |   7.5 ms |       2.09 ms |
-| [3][p03] | Lobby               | [03][s03] |  ⚡  | [03][v03] |   5.4 µs |    23 µs |         20 µs |
-| [4][p04] | Printing Department | [04][s04] |  ⚡  |     -     |   240 µs |   283 µs |             - |
-|          | ...                 |           |      |           |          |          |               |
+|      Day | Name                |   Rust    | Opt. |   Veryl   | Rust (1) | Rust (2) | Veryl (1 GHz) | Speed-up |
+| -------: | ------------------- | :-------: | :--: | :-------: | -------: | -------: | ------------: | -------: |
+| [1][p01] | Secret Entrance     | [01][s01] |  🌱  | [01][v01] |    36 µs |   927 µs |        595 µs |      1.6 |
+| [2][p02] | Gift Shop           | [02][s02] |  ⚡  | [02][v02] |   204 µs |   7.5 ms |       2.09 ms |      3.6 |
+| [3][p03] | Lobby               | [03][s03] |  ⚡  | [03][v03] |   5.4 µs |    23 µs |         20 µs |      1.2 |
+| [4][p04] | Printing Department | [04][s04] |  ⚡  | [04][v04] |   240 µs |   283 µs |         19 µs |     14.9 |
+|          | ...                 |           |      |           |          |          |               |          |
 
 **Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
 
@@ -76,3 +76,4 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [v01]: hardware/01.veryl
 [v02]: hardware/02.veryl
 [v03]: hardware/03.veryl
+[v04]: hardware/04.veryl
