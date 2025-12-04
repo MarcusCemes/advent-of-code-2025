@@ -40,8 +40,7 @@ fn solve<const N: usize>(input: &str) -> Option<u64> {
             // Find the *first* occurrence of the max digit
             for (idx, &v) in slice.iter().enumerate() {
                 if v > max {
-                    max = v;
-                    j = idx;
+                    (max, j) = (v, idx);
                 }
             }
 

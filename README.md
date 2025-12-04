@@ -14,16 +14,17 @@ The hardware implementation is designed to solve the **second part** of each day
 
 <div align="center">
 
-|      Day | Name            | Source       | Part 1 | Part 2 |   Time 1 |  Time 2 |     | Veryl       | Sim. (1 GHz) |
-| -------: | --------------- | ------------ | :----: | :----: | -------: | ------: | --- | ----------- | -----------: |
-| [1][p01] | Secret Entrance | [01.rs][s01] |   ⭐   |   ⭐   |   35.7µs | 926.8µs | 🌱  | [01.v][v01] |       595 µs |
-| [2][p02] | Gift Shop       | [02.rs][s02] |   ⭐   |   ⭐   | 204.4 µs |  7.5 ms | ⚡  | [02.v][v02] |      2.09 ms |
-| [3][p03] | Lobby           | [03.rs][s03] |   ⭐   |   ⭐   |    5.4µs | 22.9 µs | ⚡  | [03.v][v03] |      20.4 µs |
-|          | ...             |              |        |        |          |         |     |             |              |
+|      Day | Name                |   Rust    | Opt. |   Veryl   | Rust (1) | Rust (2) | Veryl (1 GHz) |
+| -------: | ------------------- | :-------: | :--: | :-------: | -------: | -------: | ------------: |
+| [1][p01] | Secret Entrance     | [01][s01] |  🌱  | [01][v01] |   35.7µs |    927µs |        595 µs |
+| [2][p02] | Gift Shop           | [02][s02] |  ⚡  | [02][v02] |   204 µs |   7.5 ms |       2.09 ms |
+| [3][p03] | Lobby               | [03][s03] |  ⚡  | [03][v03] |   5.4 µs |    23 µs |         20 µs |
+| [4][p04] | Printing Department | [04][s04] |  ⚡  |     -     |   240 µs |   283 µs |             - |
+|          | ...                 |           |      |           |          |          |               |
 
-**Key:** &nbsp;&nbsp; ⭐ Completed &nbsp;&nbsp; 🎁 In progress &nbsp;&nbsp; 😔 Gave up &nbsp;&nbsp; | &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
+**Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
 
-_Benchmarked on an AMD Ryzen 9 9950X_
+_Rust benchmarked on an AMD Ryzen 9 9950X (5.7 GHz)_
 
 </div>
 
@@ -67,9 +68,11 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [p01]: https://adventofcode.com/2023/day/1
 [p02]: https://adventofcode.com/2023/day/2
 [p03]: https://adventofcode.com/2023/day/3
+[p04]: https://adventofcode.com/2023/day/4
 [s01]: src/bin/01.rs
 [s02]: src/bin/02.rs
 [s03]: src/bin/03.rs
+[s04]: src/bin/04.rs
 [v01]: hardware/01.veryl
 [v02]: hardware/02.veryl
 [v03]: hardware/03.veryl
