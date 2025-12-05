@@ -15,6 +15,8 @@ pub fn part_two(input: &str) -> Option<u64> {
 fn parse_input(input: &str) -> impl Iterator<Item = RangeInclusive<u64>> {
     input.split(',').map(|range| {
         let (a, b) = range.split_once('-').unwrap();
+
+        // Trimming whitespace is important here!
         a.trim().parse().unwrap()..=b.trim().parse().unwrap()
     })
 }
