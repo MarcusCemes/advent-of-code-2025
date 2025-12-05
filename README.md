@@ -20,7 +20,7 @@ The hardware implementation is designed to solve the **second part** of each day
 | [2][p02] | Gift Shop           | [02][s02] |  ⚡  | [02][v02] |   204 µs |   7.5 ms |       2.09 ms |      3.6 |
 | [3][p03] | Lobby               | [03][s03] |  ⚡  | [03][v03] |   5.4 µs |    23 µs |         20 µs |      1.2 |
 | [4][p04] | Printing Department | [04][s04] |  ⚡  | [04][v04] |   240 µs |   283 µs |         19 µs |     14.9 |
-| [5][p05] | Cafeteria           | [05][s05] |  ⚡  | [05][v05] |    49 µs |   8.8 µs |       5.8 µs¹ |      1.5 |
+| [5][p05] | Cafeteria           | [05][s05] |  ⚡  | [05][v05] |    57 µs |   7.3 µs |       5.8 µs¹ |      1.5 |
 |          | ...                 |           |      |           |          |          |               |          |
 
 **Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised

@@ -35,43 +35,26 @@ fn create_disjoint_ranges(
 ) -> Vec<RangeInclusive<u64>> {
     let mut disjoint_ranges = Vec::new();
 
-    // We can't mutate a vector while iterating over it, so we store
-    // the indices of ranges that should be merged here.
-    let mut overlapping_indices = Vec::new();
-
     for mut range in ranges {
-        // Find all ranges that overlap and should therefore be joined
-        for (i, other) in disjoint_ranges.iter().enumerate() {
-            if !are_disjoint(&range, &other) {
-                overlapping_indices.push(i);
+        let mut cursor = 0;
+
+        while let Some(target) = disjoint_ranges.get(cursor) {
+            if are_disjoint(&range, target) {
+                cursor += 1;
+                continue;
             }
-        }
 
-        // If there are no overlapping ranges, we can just add this one
-        if overlapping_indices.is_empty() {
-            disjoint_ranges.push(range);
-            continue;
-        }
-
-        // Merge all overlapping ranges into the new one with a simple min/max
-        for other_idx in &overlapping_indices {
-            // SAFETY: We know that other_idx is a valid index into overlapping_indices
-            let other = unsafe { disjoint_ranges.get_unchecked(*other_idx) };
-
-            let start = min(*range.start(), *other.start());
-            let end = max(*range.end(), *other.end());
-
+            // Merge the two ranges with a simple min/max
+            let start = min(*range.start(), *target.start());
+            let end = max(*range.end(), *target.end());
             range = start..=end;
+
+            // Remove the merged range, but do not advance the cursor
+            disjoint_ranges.swap_remove(cursor);
         }
 
-        // Remove the overlapping ranges IN REVERSE ORDER to avoid shifting indices
-        for other_idx in overlapping_indices.iter().rev() {
-            disjoint_ranges.swap_remove(*other_idx);
-        }
-
-        // Finally, add the merged range and clear the list for the next iteration
+        // Add the (possibly merged) range to the list
         disjoint_ranges.push(range);
-        overlapping_indices.clear();
     }
 
     disjoint_ranges
