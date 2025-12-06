@@ -14,15 +14,15 @@ The hardware implementation is designed to solve the **second part** of each day
 
 <div align="center">
 
-|      Day | Name                |   Rust    | Opt. |   Veryl   | Rust (1) | Rust (2) | Veryl (1 GHz) | Speed-up |
-| -------: | ------------------- | :-------: | :--: | :-------: | -------: | -------: | ------------: | -------: |
-| [1][p01] | Secret Entrance     | [01][s01] |  ⚡  | [01][v01] |    33 µs |    39 µs |        595 µs |       💩 |
-| [2][p02] | Gift Shop           | [02][s02] |  ⚡  | [02][v02] |   192 µs |   7.6 ms |       2.09 ms |      3.6 |
-| [3][p03] | Lobby               | [03][s03] |  ⚡  | [03][v03] |   5.4 µs |    23 µs |         20 µs |      1.2 |
-| [4][p04] | Printing Department | [04][s04] |  ⚡  | [04][v04] |   238 µs |   279 µs |         19 µs |       15 |
-| [5][p05] | Cafeteria           | [05][s05] |  ⚡  | [05][v05] |    57 µs |   7.3 µs |       5.8 µs¹ |      1.3 |
-| [6][p06] | Trash Compactor     | [06][s06] |  ⚡  | [06][v06] |  14.1 µs |  13.3 µs |         22 µs |      0.6 |
-|          | ...                 |           |      |           |          |          |               |          |
+|      Day | Name                |   Rust    | Opt. |   Veryl   | Rust (p1) | Rust (p2) | Veryl (1 GHz) | Speed-up |
+| -------: | ------------------- | :-------: | :--: | :-------: | --------: | --------: | ------------: | -------: |
+| [1][p01] | Secret Entrance     | [01][s01] |  ⚡  | [01][v01] |     33 µs |     39 µs |         21 µs |      1.9 |
+| [2][p02] | Gift Shop           | [02][s02] |  ⚡  | [02][v02] |    192 µs |    7.6 ms |       2.09 ms |      3.6 |
+| [3][p03] | Lobby               | [03][s03] |  ⚡  | [03][v03] |    5.4 µs |     23 µs |         20 µs |      1.2 |
+| [4][p04] | Printing Department | [04][s04] |  ⚡  | [04][v04] |    238 µs |    279 µs |         19 µs |       15 |
+| [5][p05] | Cafeteria           | [05][s05] |  ⚡  | [05][v05] |     57 µs |    7.3 µs |       5.8 µs¹ |      1.3 |
+| [6][p06] | Trash Compactor     | [06][s06] |  ⚡  | [06][v06] |     14 µs |     13 µs |         22 µs |      0.6 |
+|          | ...                 |           |      |           |           |           |               |          |
 
 **Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
 
