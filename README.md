@@ -21,7 +21,7 @@ The hardware implementation is designed to solve the **second part** of each day
 | [3][p03] | Lobby               | [03][s03] |  ⚡  | [03][v03] |   5.4 µs |    23 µs |         20 µs |      1.2 |
 | [4][p04] | Printing Department | [04][s04] |  ⚡  | [04][v04] |   238 µs |   279 µs |         19 µs |       15 |
 | [5][p05] | Cafeteria           | [05][s05] |  ⚡  | [05][v05] |    57 µs |   7.3 µs |       5.8 µs¹ |      1.3 |
-| [6][p06] | Trash Compactor     | [06][s06] |  ⚡  |     -     |  14.1 µs |  13.3 µs |             - |        - |
+| [6][p06] | Trash Compactor     | [06][s06] |  ⚡  | [06][v06] |  14.1 µs |  13.3 µs |         22 µs |      0.6 |
 |          | ...                 |           |      |           |          |          |               |          |
 
 **Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
@@ -88,3 +88,4 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [v03]: hardware/03.veryl
 [v04]: hardware/04.veryl
 [v05]: hardware/05.veryl
+[v06]: hardware/06.veryl
