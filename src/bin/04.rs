@@ -20,8 +20,7 @@ pub fn part_one(input: &str) -> Option<u64> {
         .tuple_windows::<(u8, u8, u8)>();
 
     // Previous row: pad by line_length + 1 (one full row) + 1 (for window padding) = line_length + 2
-    let previous = iter::repeat(b'\n')
-        .take(line_length + 2)
+    let previous = std::iter::repeat_n(b'\n', line_length + 2)
         .chain(iter_bytes.clone())
         .tuple_windows::<(u8, u8, u8)>();
 
@@ -100,7 +99,7 @@ fn create_padded_grid(
     positions: &mut Vec<u16>,
 ) {
     // Add padding to the top of the grid
-    roles.extend(iter::repeat(false).take(line_length + 2));
+    roles.extend(std::iter::repeat_n(false, line_length + 2));
 
     // Pad the start of the first line
     roles.push(false);
@@ -127,7 +126,7 @@ fn create_padded_grid(
     }
 
     // Add padding to the bottom of the grid
-    roles.extend(iter::repeat(false).take(line_length + 2));
+    roles.extend(std::iter::repeat_n(false, line_length + 2));
 }
 
 /// Returns true if the roll at index `i` has fewer than 4 adjacent rolls.

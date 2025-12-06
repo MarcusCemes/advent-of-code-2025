@@ -21,6 +21,7 @@ The hardware implementation is designed to solve the **second part** of each day
 | [3][p03] | Lobby               | [03][s03] |  ⚡  | [03][v03] |   5.4 µs |    23 µs |         20 µs |      1.2 |
 | [4][p04] | Printing Department | [04][s04] |  ⚡  | [04][v04] |   238 µs |   279 µs |         19 µs |       15 |
 | [5][p05] | Cafeteria           | [05][s05] |  ⚡  | [05][v05] |    57 µs |   7.3 µs |       5.8 µs¹ |      1.3 |
+| [6][p06] | Trash Compactor     | [06][s06] |  ⚡  |     -     |  14.1 µs |  13.3 µs |             - |        - |
 |          | ...                 |           |      |           |          |          |               |          |
 
 **Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
@@ -75,11 +76,13 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [p03]: https://adventofcode.com/2023/day/3
 [p04]: https://adventofcode.com/2023/day/4
 [p05]: https://adventofcode.com/2023/day/5
+[p06]: https://adventofcode.com/2023/day/6
 [s01]: src/bin/01.rs
 [s02]: src/bin/02.rs
 [s03]: src/bin/03.rs
 [s04]: src/bin/04.rs
 [s05]: src/bin/05.rs
+[s06]: src/bin/06.rs
 [v01]: hardware/01.veryl
 [v02]: hardware/02.veryl
 [v03]: hardware/03.veryl

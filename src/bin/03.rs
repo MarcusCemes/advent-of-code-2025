@@ -48,7 +48,7 @@ fn solve<const N: usize>(input: &str) -> Option<u64> {
             acc = 10 * acc + (max - b'0') as u64;
 
             // Move the cursor past the selected digit
-            cursor += j as usize + 1;
+            cursor += j + 1;
         }
 
         total += acc;

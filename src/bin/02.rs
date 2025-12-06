@@ -102,7 +102,7 @@ fn is_repeated_block(n: u64, block_length: u32) -> bool {
 
 /// Returns an iterator over all block lengths that can evenly divide n.
 fn repeatable_lengths(n: u32) -> impl Iterator<Item = u32> {
-    (1..=n / 2).filter(move |block_length| n % block_length == 0)
+    (1..=n / 2).filter(move |block_length| n.is_multiple_of(*block_length))
 }
 
 /// Returns the number of digits in n.
