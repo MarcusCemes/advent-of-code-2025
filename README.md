@@ -23,6 +23,7 @@ The hardware implementation is designed to solve the **second part** of each day
 | [5][p05] | Cafeteria           | [05][s05] |  ⚡  | [05][v05] |     57 µs |    7.3 µs |       5.8 µs¹ |      1.3 |
 | [6][p06] | Trash Compactor     | [06][s06] |  ⚡  | [06][v06] |     14 µs |     13 µs |         22 µs |      0.6 |
 | [7][p07] | Laboratories        | [07][s07] |  ⚡  | [07][v07] |    8.0 µs |    8.0 µs |         20 µs |      0.4 |
+| [8][p08] | Playground          | [08][s08] |  ⚡  |     -     |     10 ms |     10 ms |             - |        - |
 |          | ...                 |           |      |           |           |           |               |          |
 
 **Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
@@ -79,6 +80,7 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [p05]: https://adventofcode.com/2023/day/5
 [p06]: https://adventofcode.com/2023/day/6
 [p07]: https://adventofcode.com/2023/day/7
+[p08]: https://adventofcode.com/2023/day/8
 [s01]: src/bin/01.rs
 [s02]: src/bin/02.rs
 [s03]: src/bin/03.rs
@@ -86,6 +88,7 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [s05]: src/bin/05.rs
 [s06]: src/bin/06.rs
 [s07]: src/bin/07.rs
+[s08]: src/bin/08.rs
 [v01]: hardware/01.veryl
 [v02]: hardware/02.veryl
 [v03]: hardware/03.veryl

@@ -28,4 +28,5 @@ pico-args = "0.5"
 tinyjson = "2.5"
 
 # Solution dependencies
+glam = "0.30"
 itertools = "0.14"
