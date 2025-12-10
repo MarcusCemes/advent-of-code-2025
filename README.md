@@ -26,7 +26,7 @@ The hardware implementation is designed to solve the **second part** of each day
 |  [8][p08] | Playground          |       [08][s08]       |  🌱  |     -     |     10 ms |     10 ms |             - |        - |
 |           |                     | &nbsp;[08][s08_fast]² |  ⚡  |     -     |    501 µs |    1.2 ms |             - |        - |
 |  [9][p09] | Movie Theater       |       [09][s09]       |  ⚡  |     -     |    123 µs |    9.6 ms |             - |        - |
-| [10][p10] | Factory             |       [10][s10]       |  🌱  |     -     |    458 µs |         - |             - |        - |
+| [10][p10] | Factory             |       [10][s10]       |  🌱  |     -     |    458 µs |   9.4 ms³ |             - |        - |
 |           | ...                 |                       |      |           |           |           |               |          |
 
 **Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
@@ -39,6 +39,8 @@ _Rust benchmarked on an AMD Ryzen 9 9950X (5.7 GHz) using Windows 11_
 <i>¹ Idle cycles (due to slow input streaming of irrelevant/unused problem data at 1 B/cycle) were subtracted from the total simulation time to give a more accurate measure of the hardware processing speed.</i>
 <br />
 <i>² A more complex implementation. Improves cache locality (SoA), SIMD generation, uses bounded heaps and <a href="https://en.wikipedia.org/wiki/Prim%27s_algorithm">Prim's Algorithm</a>. I can't take credit for this one.</i>
+<br />
+<i>³ Solves a constrained optimisation problem (minimise ∑ x[i], s.t. Ax = b) using <a href="https://github.com/Specy/microlp">microlp</a>.</i>
 </sub>
 
 ## Usage

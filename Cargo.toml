@@ -28,6 +28,7 @@ pico-args = "0.5"
 tinyjson = "2.5"
 
 # Solution dependencies
+good_lp = { version = "1.14", features = ["microlp"], default-features = false }
 glam = "0.30"
 itertools = "0.14"
 pathfinding = "4.14"
