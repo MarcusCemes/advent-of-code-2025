@@ -14,19 +14,20 @@ The hardware implementation is designed to solve the **second part** of each day
 
 <div align="center">
 
-|      Day | Name                |         Rust          | Opt. |   Veryl   | Rust (p1) | Rust (p2) | Veryl (1 GHz) | Speed-up |
-| -------: | ------------------- | :-------------------: | :--: | :-------: | --------: | --------: | ------------: | -------: |
-| [1][p01] | Secret Entrance     |       [01][s01]       |  ⚡  | [01][v01] |     33 µs |     39 µs |         21 µs |      1.9 |
-| [2][p02] | Gift Shop           |       [02][s02]       |  ⚡  | [02][v02] |    192 µs |    7.6 ms |       2.09 ms |      3.6 |
-| [3][p03] | Lobby               |       [03][s03]       |  ⚡  | [03][v03] |    5.4 µs |     23 µs |         20 µs |      1.2 |
-| [4][p04] | Printing Department |       [04][s04]       |  ⚡  | [04][v04] |    238 µs |    279 µs |         19 µs |       15 |
-| [5][p05] | Cafeteria           |       [05][s05]       |  ⚡  | [05][v05] |     57 µs |    7.3 µs |       5.8 µs¹ |      1.3 |
-| [6][p06] | Trash Compactor     |       [06][s06]       |  ⚡  | [06][v06] |     14 µs |     13 µs |         22 µs |      0.6 |
-| [7][p07] | Laboratories        |       [07][s07]       |  ⚡  | [07][v07] |    8.0 µs |    8.0 µs |         20 µs |      0.4 |
-| [8][p08] | Playground          |       [08][s08]       |  🌱  |     -     |     10 ms |     10 ms |             - |        - |
-|          |                     | &nbsp;[08][s08_fast]² |  ⚡  |     -     |    501 µs |    1.2 ms |             - |        - |
-| [9][p09] | Movie Theater       |       [09][s09]       |  ⚡  |     -     |    123 µs |    9.6 ms |             - |        - |
-|          | ...                 |                       |      |           |           |           |               |          |
+|       Day | Name                |         Rust          | Opt. |   Veryl   | Rust (p1) | Rust (p2) | Veryl (1 GHz) | Speed-up |
+| --------: | ------------------- | :-------------------: | :--: | :-------: | --------: | --------: | ------------: | -------: |
+|  [1][p01] | Secret Entrance     |       [01][s01]       |  ⚡  | [01][v01] |     33 µs |     39 µs |         21 µs |      1.9 |
+|  [2][p02] | Gift Shop           |       [02][s02]       |  ⚡  | [02][v02] |    192 µs |    7.6 ms |       2.09 ms |      3.6 |
+|  [3][p03] | Lobby               |       [03][s03]       |  ⚡  | [03][v03] |    5.4 µs |     23 µs |         20 µs |      1.2 |
+|  [4][p04] | Printing Department |       [04][s04]       |  ⚡  | [04][v04] |    238 µs |    279 µs |         19 µs |       15 |
+|  [5][p05] | Cafeteria           |       [05][s05]       |  ⚡  | [05][v05] |     57 µs |    7.3 µs |       5.8 µs¹ |      1.3 |
+|  [6][p06] | Trash Compactor     |       [06][s06]       |  ⚡  | [06][v06] |     14 µs |     13 µs |         22 µs |      0.6 |
+|  [7][p07] | Laboratories        |       [07][s07]       |  ⚡  | [07][v07] |    8.0 µs |    8.0 µs |         20 µs |      0.4 |
+|  [8][p08] | Playground          |       [08][s08]       |  🌱  |     -     |     10 ms |     10 ms |             - |        - |
+|           |                     | &nbsp;[08][s08_fast]² |  ⚡  |     -     |    501 µs |    1.2 ms |             - |        - |
+|  [9][p09] | Movie Theater       |       [09][s09]       |  ⚡  |     -     |    123 µs |    9.6 ms |             - |        - |
+| [10][p10] | Factory             |       [10][s10]       |  🌱  |     -     |    458 µs |         - |             - |        - |
+|           | ...                 |                       |      |           |           |           |               |          |
 
 **Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
 
@@ -86,6 +87,7 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [p07]: https://adventofcode.com/2023/day/7
 [p08]: https://adventofcode.com/2023/day/8
 [p09]: https://adventofcode.com/2023/day/9
+[p10]: https://adventofcode.com/2023/day/10
 [s01]: src/bin/01.rs
 [s02]: src/bin/02.rs
 [s03]: src/bin/03.rs
@@ -96,6 +98,7 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [s08]: src/bin/08.rs
 [s08_fast]: src/bin/08_fast.rs
 [s09]: src/bin/09.rs
+[s10]: src/bin/10.rs
 [v01]: hardware/01.veryl
 [v02]: hardware/02.veryl
 [v03]: hardware/03.veryl
