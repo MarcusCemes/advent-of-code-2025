@@ -27,6 +27,7 @@ The hardware implementation is designed to solve the **second part** of each day
 |           |                     | &nbsp;[08][s08_fast]² |  ⚡  |     -     |    501 µs |    1.2 ms |             - |        - |
 |  [9][p09] | Movie Theater       |       [09][s09]       |  ⚡  |     -     |    123 µs |    9.6 ms |             - |        - |
 | [10][p10] | Factory             |       [10][s10]       |  🌱  |     -     |    458 µs |   9.4 ms³ |             - |        - |
+| [11][p11] | Reactor             |       [11][s11]       |  ⚡  |     -     |     53 µs |    100 µs |             - |        - |
 |           | ...                 |                       |      |           |           |           |               |          |
 
 **Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
@@ -80,16 +81,17 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [rust]: https://www.rust-lang.org/
 [veryl]: https://veryl-lang.org/
 [template]: https://github.com/fspoettel/advent-of-code-rust
-[p01]: https://adventofcode.com/2023/day/1
-[p02]: https://adventofcode.com/2023/day/2
-[p03]: https://adventofcode.com/2023/day/3
-[p04]: https://adventofcode.com/2023/day/4
-[p05]: https://adventofcode.com/2023/day/5
-[p06]: https://adventofcode.com/2023/day/6
-[p07]: https://adventofcode.com/2023/day/7
-[p08]: https://adventofcode.com/2023/day/8
-[p09]: https://adventofcode.com/2023/day/9
-[p10]: https://adventofcode.com/2023/day/10
+[p01]: https://adventofcode.com/2025/day/1
+[p02]: https://adventofcode.com/2025/day/2
+[p03]: https://adventofcode.com/2025/day/3
+[p04]: https://adventofcode.com/2025/day/4
+[p05]: https://adventofcode.com/2025/day/5
+[p06]: https://adventofcode.com/2025/day/6
+[p07]: https://adventofcode.com/2025/day/7
+[p08]: https://adventofcode.com/2025/day/8
+[p09]: https://adventofcode.com/2025/day/9
+[p10]: https://adventofcode.com/2025/day/10
+[p11]: https://adventofcode.com/2025/day/11
 [s01]: src/bin/01.rs
 [s02]: src/bin/02.rs
 [s03]: src/bin/03.rs
@@ -101,6 +103,7 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [s08_fast]: src/bin/08_fast.rs
 [s09]: src/bin/09.rs
 [s10]: src/bin/10.rs
+[s11]: src/bin/11.rs
 [v01]: hardware/01.veryl
 [v02]: hardware/02.veryl
 [v03]: hardware/03.veryl
