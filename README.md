@@ -27,7 +27,7 @@ The hardware implementation is designed to solve the **second part** of each day
 |           |                     | &nbsp;[08][s08_fast]² |  ⚡  |     -     |    501 µs |    1.2 ms |             - |        - |
 |  [9][p09] | Movie Theater       |       [09][s09]       |  ⚡  |     -     |    123 µs |    9.6 ms |             - |        - |
 | [10][p10] | Factory             |       [10][s10]       |  🌱  |     -     |    458 µs |   9.4 ms³ |             - |        - |
-| [11][p11] | Reactor             |       [11][s11]       |  ⚡  |     -     |     53 µs |    100 µs |             - |        - |
+| [11][p11] | Reactor             |       [11][s11]       |  ⚡  |     -     |     45 µs |     73 µs |             - |        - |
 |           | ...                 |                       |      |           |           |           |               |          |
 
 **Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
