@@ -22,7 +22,7 @@ The hardware implementation is designed to solve the **second part** of each day
 |  [4][p04] | Printing Department |       [04][s04]       |  ⚡  | [04][v04] |    238 µs |    279 µs |         19 µs |       15 |
 |  [5][p05] | Cafeteria           |       [05][s05]       |  ⚡  | [05][v05] |     57 µs |    7.3 µs |       5.8 µs¹ |      1.3 |
 |  [6][p06] | Trash Compactor     |       [06][s06]       |  ⚡  | [06][v06] |     14 µs |     13 µs |         22 µs |      0.6 |
-|  [7][p07] | Laboratories        |       [07][s07]       |  ⚡  | [07][v07] |    8.0 µs |    8.0 µs |         20 µs |      0.4 |
+|  [7][p07] | Laboratories        |       [07][s07]       |  ⚡  | [07][v07] |    8.0 µs |    8.0 µs |        853 ns |      9.4 |
 |  [8][p08] | Playground          |       [08][s08]       |  🌱  |     -     |     10 ms |     10 ms |             - |        - |
 |           |                     | &nbsp;[08][s08_fast]² |  ⚡  |     -     |    501 µs |    1.2 ms |             - |        - |
 |  [9][p09] | Movie Theater       |       [09][s09]       |  ⚡  |     -     |    123 µs |    9.6 ms |             - |        - |
