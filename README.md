@@ -28,7 +28,7 @@ The hardware implementation is designed to solve the **second part** of each day
 |  [9][p09] | Movie Theater       |       [09][s09]       |  ⚡  |     -     |    123 µs |    9.6 ms |             - |        - |
 | [10][p10] | Factory             |       [10][s10]       |  🌱  |     -     |    458 µs |   9.4 ms³ |             - |        - |
 | [11][p11] | Reactor             |       [11][s11]       |  ⚡  |     -     |     45 µs |     73 µs |             - |        - |
-|           | ...                 |                       |      |           |           |           |               |          |
+| [12][p12] | Christmas Tree Farm |       [12][s12]       |  ⚡  |     -     |    115 μs |       N/A |             - |        - |
 
 **Key:** &nbsp;&nbsp; 🌱 It works &nbsp;&nbsp; ⚡ Optimised
 
@@ -92,6 +92,7 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [p09]: https://adventofcode.com/2025/day/9
 [p10]: https://adventofcode.com/2025/day/10
 [p11]: https://adventofcode.com/2025/day/11
+[p12]: https://adventofcode.com/2025/day/12
 [s01]: src/bin/01.rs
 [s02]: src/bin/02.rs
 [s03]: src/bin/03.rs
@@ -104,6 +105,7 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [s09]: src/bin/09.rs
 [s10]: src/bin/10.rs
 [s11]: src/bin/11.rs
+[s12]: src/bin/12.rs
 [v01]: hardware/01.veryl
 [v02]: hardware/02.veryl
 [v03]: hardware/03.veryl
