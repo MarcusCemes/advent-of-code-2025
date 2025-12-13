@@ -1,0 +1,74 @@
+/// Find the index of the first occurrence of a delimiter byte in the input data.
+/// If not found within the available bytes, returns bytes_available.
+pub module FindDelimiter #(
+    param BYTES    : u32      = 32   ,
+    param DELIMITER: logic<8> = 8'h0A, // Default: newline
+) (
+    i_available: input logic<IDX_BITS>,
+    i_data     : input logic<BYTES, 8>,
+
+    o_index: output logic<IDX_BITS>,
+    o_match: output logic          ,
+) {
+    const IDX_BITS: u32 = $clog2(BYTES + 1);
+
+    // Priority encoder: find the first matching byte
+    always_comb {
+        o_index = i_available;
+        o_match = 0;
+
+        for i: u32 in 0..BYTES {
+            if i_data[i] == DELIMITER {
+                o_index = i as IDX_BITS;
+                o_match = 1;
+                break;
+            }
+        }
+    }
+}
+
+/// Generate an array of digit values starting from a given LSB index.
+/// Only fills up to 'i_digits' entries; others are zero.
+module DigitsExtractor #(
+    param BYTES : u32 = 32,
+    param DIGITS: u32 = 15,
+) (
+    i_data     : input  logic<BYTES, 8> ,
+    i_digits   : input  logic<DIGIT_LEN>,
+    i_lsb_index: input  logic<IDX_BITS> ,
+    o_value    : output logic<DIGITS, 4>,
+) {
+    const IDX_BITS  : u32 = $clog2(BYTES);
+    const DIGIT_BITS: u32 = $clog2(DIGITS);
+    const DIGIT_LEN : u32 = $clog2(DIGITS + 1);
+
+    always_comb {
+        o_value = '0;
+
+        for i: u32 in 0..DIGITS {
+            // Compute position and value unconditionally to avoid latches
+            let pos: logic<IDX_BITS> = i_lsb_index - i as IDX_BITS;
+            let val: logic<8>        = i_data[pos] - 8'h30;
+
+            if i <: i_digits {
+                o_value[i] = val[3:0];
+            }
+        }
+    }
+}
+
+/// Combine an array of digit values into a single integer value.
+module DigitCombiner #(
+    param DIGITS: u32 = 15,
+) (
+    i_digits: input  logic<DIGITS, 4>,
+    o_value : output logic<64>       ,
+) {
+    always_comb {
+        o_value = 0;
+
+        for i: u32 in 0..DIGITS {
+            o_value = o_value * 10 + i_digits[DIGITS - i - 1] as 64;
+        }
+    }
+}

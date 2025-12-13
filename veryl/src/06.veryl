@@ -2,20 +2,34 @@
 /// - Decoder: parses input, emits digits (for shift regs) or operators (for solver)
 /// - Solver: buffers digits in indexed registers, processes on operator receipt
 pub module Day06 #(
+    param BYTES     : u32 = 1 ,
     param N_ROWS    : u32 = 3 ,
     param LINE_WIDTH: u32 = 16,
 ) (
     clk: input clock,
     rst: input reset,
 
-    i_data : input logic<8>,
-    i_valid: input logic   ,
-
-    o_answer: output logic<64>,
-    o_busy  : output logic    ,
-    o_valid : output logic    ,
+    i_data     : input  logic<BYTES, 8>          ,
+    i_available: input  logic<$clog2(BYTES + 1)> ,
+    o_consumed : output logic<$clog2(BYTES + 1)> ,
+    o_finished : output logic                    ,
+    o_answer   : output logic<64>                ,
 ) {
     const ROW_IDX_BITS: u32 = $clog2(N_ROWS);
+
+    // Map new interface to internal signals
+    let i_byte : logic<8> = i_data[0];
+    let i_valid: logic    = i_available != 0;
+    var o_busy : logic;
+
+    // Output mapping
+    always_comb {
+        o_consumed = i_available;
+        if o_busy {
+            o_consumed = 0;
+        }
+        o_finished = input_stopped && !solver_busy;
+    }
 
     // Internal signals
     var dec_value    : logic<4>           ;
@@ -36,7 +50,7 @@ pub module Day06 #(
     ) (
         clk          : clk         ,
         rst          : rst         ,
-        i_data       : i_data      ,
+        i_data       : i_byte      ,
         i_valid      : i_valid     ,
         o_value      : dec_value   ,
         o_is_digit   : dec_is_digit,
@@ -81,9 +95,6 @@ pub module Day06 #(
 
     assign o_answer = solver_answer;
     assign o_busy   = solver_busy || dec_busy;
-
-    // Done when input has stopped and solver is not busy
-    assign o_valid = input_stopped && !solver_busy;
 }
 
 /// Decoder: Parses input stream, outputs digits or operators
@@ -296,3 +307,48 @@ module Day06Solver #(
         }
     }
 }
+
+#[test(test_day_06)]
+embed (inline) sv{{{
+    `timescale 1ns/1ps
+
+    module test_day_06;
+        localparam string   FILENAME = "day_06.txt";
+        localparam longint  EXPECTED = 64'd3263827;
+        localparam longint  TIMEOUT  = 100000;
+
+        localparam BYTES    = 1;
+        localparam IDX_BITS = $clog2(BYTES + 1);
+
+        logic clk, rst;
+        longint cycle_count;
+
+        logic [BYTES-1:0][7:0] i_data;
+        logic [IDX_BITS-1:0] i_available;
+        logic [IDX_BITS-1:0] o_consumed;
+        logic o_finished;
+        logic [63:0] o_answer;
+
+        aoc_Day06 #(
+            .BYTES(BYTES),
+            .N_ROWS(3),
+            .LINE_WIDTH(16)
+        ) dut (
+            .clk(clk), .rst(rst),
+            .i_data(i_data), .i_available(i_available),
+            .o_consumed(o_consumed), .o_finished(o_finished),
+            .o_answer(o_answer)
+        );
+
+        initial begin clk = 0; forever #0.5 clk = ~clk; end
+
+        `include "aoc_tasks.svh"
+
+        initial begin
+            aoc_init();
+            aoc_run_test(FILENAME, TIMEOUT, cycle_count);
+            aoc_verify(EXPECTED, cycle_count);
+            $finish;
+        end
+    endmodule
+}}}

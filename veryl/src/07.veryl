@@ -177,3 +177,53 @@ pub module Day07 #(
         }
     }
 }
+
+#[test(test_day_07)]
+embed (inline) sv{{{
+    `timescale 1ns/1ps
+
+    module test_day_07;
+        localparam string   FILENAME = "day_07.txt";
+        localparam longint  EXPECTED = 64'd40;
+        localparam longint  TIMEOUT  = 10000;
+
+        localparam BYTES    = 32;
+        localparam IDX_BITS = $clog2(BYTES + 1);
+
+        logic clk, rst;
+        longint cycle_count;
+
+        logic [BYTES-1:0][7:0] i_data;
+        logic [IDX_BITS-1:0] i_available;
+        logic [IDX_BITS-1:0] o_consumed;
+        logic o_finished;
+        logic [63:0] o_answer;
+
+        aoc_Day07 #(
+            .BYTES(BYTES),
+            .LINE_WIDTH(15)
+        ) dut (
+            .clk(clk),
+            .rst(rst),
+            .i_data(i_data),
+            .i_available(i_available),
+            .o_consumed(o_consumed),
+            .o_finished(o_finished),
+            .o_answer(o_answer)
+        );
+
+        initial begin
+            clk = 0;
+            forever #0.5 clk = ~clk;
+        end
+
+        `include "aoc_tasks.svh"
+
+        initial begin
+            aoc_init();
+            aoc_run_test(FILENAME, TIMEOUT, cycle_count);
+            aoc_verify(EXPECTED, cycle_count);
+            $finish;
+        end
+    endmodule
+}}}

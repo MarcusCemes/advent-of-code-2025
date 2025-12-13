@@ -1,0 +1,28 @@
+[project]
+name = "aoc"
+version = "0.1.0"
+
+[build]
+sources = ["src"]
+target = { type = "directory", path = "target" }
+
+[test]
+simulator = "verilator"
+include_files = [
+    "data/examples/day_01.txt",
+    "data/examples/day_02.txt",
+    "data/examples/day_03.txt",
+    "data/examples/day_04.txt",
+    "data/examples/day_05.txt",
+    "data/examples/day_06.txt",
+    "data/examples/day_07.txt",
+    "src/test/aoc_tasks.svh",
+]
+
+[test.verilator]
+compile_args = [
+    "+incdir+src/test",
+    "-Wno-TIMESCALEMOD",
+    "-trace-max-array",
+    "256",
+]

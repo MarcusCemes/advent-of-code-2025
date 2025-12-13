@@ -16,12 +16,12 @@ The hardware implementation is designed to solve the **second part** of each day
 
 |       Day | Name                |         Rust          | Opt. |   Veryl   | Rust (p1) | Rust (p2) | Veryl (1 GHz) | Speed-up |
 | --------: | ------------------- | :-------------------: | :--: | :-------: | --------: | --------: | ------------: | -------: |
-|  [1][p01] | Secret Entrance     |       [01][s01]       |  ⚡  | [01][v01] |     33 µs |     39 µs |         21 µs |      1.9 |
-|  [2][p02] | Gift Shop           |       [02][s02]       |  ⚡  | [02][v02] |    192 µs |    7.6 ms |       2.09 ms |      3.6 |
-|  [3][p03] | Lobby               |       [03][s03]       |  ⚡  | [03][v03] |    5.4 µs |     23 µs |         20 µs |      1.2 |
-|  [4][p04] | Printing Department |       [04][s04]       |  ⚡  | [04][v04] |    238 µs |    279 µs |         19 µs |       15 |
-|  [5][p05] | Cafeteria           |       [05][s05]       |  ⚡  | [05][v05] |     57 µs |    7.3 µs |       5.8 µs¹ |      1.3 |
-|  [6][p06] | Trash Compactor     |       [06][s06]       |  ⚡  | [06][v06] |     14 µs |     13 µs |         22 µs |      0.6 |
+|  [1][p01] | Secret Entrance     |       [01][s01]       |  ⚡  | [01][v01] |     33 µs |     39 µs |        21 µs¹ |      1.9 |
+|  [2][p02] | Gift Shop           |       [02][s02]       |  ⚡  | [02][v02] |    192 µs |    7.6 ms |      2.09 ms¹ |      3.6 |
+|  [3][p03] | Lobby               |       [03][s03]       |  ⚡  | [03][v03] |    5.4 µs |     23 µs |        20 µs¹ |      1.2 |
+|  [4][p04] | Printing Department |       [04][s04]       |  ⚡  | [04][v04] |    238 µs |    279 µs |        19 µs¹ |       15 |
+|  [5][p05] | Cafeteria           |       [05][s05]       |  ⚡  | [05][v05] |     57 µs |    7.3 µs |        1.0 µs |      7.3 |
+|  [6][p06] | Trash Compactor     |       [06][s06]       |  ⚡  | [06][v06] |     14 µs |     13 µs |        22 µs¹ |      0.6 |
 |  [7][p07] | Laboratories        |       [07][s07]       |  ⚡  | [07][v07] |    8.0 µs |    8.0 µs |        853 ns |      9.4 |
 |  [8][p08] | Playground          |       [08][s08]       |  🌱  |     -     |     10 ms |     10 ms |             - |        - |
 |           |                     | &nbsp;[08][s08_fast]² |  ⚡  |     -     |    501 µs |    1.2 ms |             - |        - |
@@ -37,7 +37,7 @@ _Rust benchmarked on an AMD Ryzen 9 9950X (5.7 GHz) using Windows 11_
 </div>
 
 <sub>
-<i>¹ Idle cycles (due to slow input streaming of irrelevant/unused problem data at 1 B/cycle) were subtracted from the total simulation time to give a more accurate measure of the hardware processing speed.</i>
+<i>¹ Limited by input bandwidth (1 B/tick = 1 GB/s @ 1 GHz).</i>
 <br />
 <i>² A more complex implementation. Improves cache locality (SoA), SIMD generation, uses bounded heaps and <a href="https://en.wikipedia.org/wiki/Prim%27s_algorithm">Prim's Algorithm</a>. I can't take credit for this one.</i>
 <br />
@@ -45,6 +45,8 @@ _Rust benchmarked on an AMD Ryzen 9 9950X (5.7 GHz) using Windows 11_
 </sub>
 
 ## Usage
+
+### Rust
 
 Install [Rust](https://www.rust-lang.org/).
 
@@ -66,6 +68,36 @@ cargo time <day>
 
 Tests can be run without any extra configuration as they use the AoC examples, which are committed
 in this repository under `data/`. If you want to run the solutions against your own input data, place them into the `/data/inputs/` (e.g. `01.txt` for day 1) and run `cargo solve`. Benchmarks were run on my personal problem inputs.
+
+### Veryl
+
+Install [Veryl](https://veryl-lang.org/) and [Verilator](https://www.veripool.org/verilator/).
+
+Run the following commands to run the project:
+
+```sh
+# Navigate to the Veryl project
+cd veryl
+
+# Transpile to SystemVerilog
+veryl build
+
+# Build and simulate with Verilator
+veryl test
+
+# View warnings and generate waveforms
+veryl test --verbose --wave
+
+# Simulate a specific day
+veryl test src/day_xx.veryl src/helpers.veryl
+```
+
+To simulate with your own input:
+
+1. Create a `data/input/day_xx.txt` file
+2. Modify `Veryl.toml` to include it instead of the example file
+3. Change the `EXPECTED` constant in the day's inline test
+4. Run `veryl test --verbose`
 
 ## Acknowledgments
 
@@ -106,10 +138,10 @@ Distributed under the MIT Licence. See [LICENCE](LICENCE) for more information.
 [s10]: src/bin/10.rs
 [s11]: src/bin/11.rs
 [s12]: src/bin/12.rs
-[v01]: hardware/01.veryl
-[v02]: hardware/02.veryl
-[v03]: hardware/03.veryl
-[v04]: hardware/04.veryl
-[v05]: hardware/05.veryl
-[v06]: hardware/06.veryl
-[v07]: hardware/07.veryl
+[v01]: veryl/src/01.veryl
+[v02]: veryl/src/02.veryl
+[v03]: veryl/src/03.veryl
+[v04]: veryl/src/04.veryl
+[v05]: veryl/src/05.veryl
+[v06]: veryl/src/06.veryl
+[v07]: veryl/src/07.veryl

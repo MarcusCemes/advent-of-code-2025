@@ -1,0 +1,11 @@
+# Build output
+.build/
+/target
+/dependencies
+*.f
+*.vcd
+
+# Verilator
+obj_dir/
+
+/data/input/*.txt
