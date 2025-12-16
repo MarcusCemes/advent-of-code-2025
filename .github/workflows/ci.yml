@@ -1,0 +1,39 @@
+name: Test solutions
+on: [push]
+
+env:
+    CARGO_TERM_COLOR: always
+
+jobs:
+    rust:
+        name: Test Rust solutions
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Run tests
+              run: cargo test --verbose
+
+    veryl:
+        name: Test Veryl solutions
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Veryl
+              uses: veryl-lang/setup-veryl@v1
+
+            - name: Check Veryl
+              run: veryl check
+              working-directory: ./veryl
+
+            - name: Setup Verilator
+              uses: veryl-lang/setup-verilator@v1
+
+            - name: Run Veryl tests
+              run: veryl test --verbose
+              working-directory: ./veryl
