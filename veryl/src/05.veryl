@@ -13,43 +13,46 @@ pub module Day05 #(
     clk: input clock,
     rst: input reset,
 
-    i_data     : input  logic<BYTES, 8>,
-    i_available: input  logic<IDX_BITS>,
-    o_consumed : output logic<IDX_BITS>,
-    o_finished : output logic          ,
-    o_answer   : output logic<64>      ,
+    i_available: input logic<IDX_BITS>,
+    i_data     : input logic<BYTES, 8>,
+    i_eof      : input logic          ,
+
+    o_consumed: output logic<IDX_BITS>,
+    o_finished: output logic          ,
+    o_answer  : output logic<64>      ,
 ) {
     const IDX_BITS: u32 = $clog2(BYTES + 1);
 
-    var decoder_end     : logic<64>;
-    var decoder_finished: logic    ;
-    var decoder_start   : logic<64>;
-    var decoder_valid   : logic    ;
-    var solver_busy     : logic    ;
+    var decoder_done : logic    ;
+    var decoder_end  : logic<64>;
+    var decoder_start: logic<64>;
+    var decoder_valid: logic    ;
+    var solver_busy  : logic    ;
 
     inst decoder: Day05Decoder (
-        clk                          ,
-        rst                          ,
-        i_available                  ,
-        i_busy     : solver_busy     ,
-        i_data                       ,
-        o_consumed                   ,
-        o_end      : decoder_end     ,
-        o_finished : decoder_finished,
-        o_start    : decoder_start   ,
-        o_valid    : decoder_valid   ,
+        clk                       ,
+        rst                       ,
+        i_available               ,
+        i_busy     : solver_busy  ,
+        i_data                    ,
+        i_eof                     ,
+        o_consumed                ,
+        o_done     : decoder_done ,
+        o_end      : decoder_end  ,
+        o_start    : decoder_start,
+        o_valid    : decoder_valid,
     );
 
     inst solver: Day05Solver (
-        clk                         ,
-        rst                         ,
-        i_end     : decoder_end     ,
-        i_finished: decoder_finished,
-        i_start   : decoder_start   ,
-        i_valid   : decoder_valid   ,
-        o_answer                    ,
-        o_busy    : solver_busy     ,
-        o_finished                  ,
+        clk                      ,
+        rst                      ,
+        i_done    : decoder_done ,
+        i_end     : decoder_end  ,
+        i_start   : decoder_start,
+        i_valid   : decoder_valid,
+        o_answer                 ,
+        o_busy    : solver_busy  ,
+        o_finished               ,
     );
 }
 
@@ -63,141 +66,52 @@ module Day05Decoder #(
     i_available: input logic<IDX_BITS>,
     i_busy     : input logic          ,
     i_data     : input logic<BYTES, 8>,
+    i_eof      : input logic          ,
 
     o_consumed: output logic<IDX_BITS>,
+    o_done    : output logic          ,
     o_end     : output logic<64>      ,
-    o_finished: output logic          ,
     o_start   : output logic<64>      ,
     o_valid   : output logic          ,
 ) {
-    const DIGIT_BITS: u32 = $clog2(DIGITS);
-    const DIGIT_LEN : u32 = $clog2(DIGITS + 1);
-    const IDX_BITS  : u32 = $clog2(BYTES + 1);
+    const IDX_BITS: u32 = $clog2(BYTES + 1);
 
     enum State: logic {
         Parse,
         Done,
     }
 
-    var state: State;
+    var consumed: logic<IDX_BITS>;
+    var values  : logic<2, 64>   ;
+    var valid   : logic          ;
 
-    var dash_index   : logic<IDX_BITS>;
-    var dash_match   : logic          ;
-    var newline_index: logic<IDX_BITS>;
-    var newline_match: logic          ;
-
-    const DATA_IDX_BITS: u32                  = $clog2(BYTES);
-    var index_a      : logic<DATA_IDX_BITS>;
-    var index_b      : logic<DATA_IDX_BITS>;
-
-    var n_digits_a: logic<DIGIT_LEN>;
-    var n_digits_b: logic<DIGIT_LEN>;
-
-    var digits_a: logic<DIGITS, 4>;
-    var digits_b: logic<DIGITS, 4>;
-
-    inst dash: FindDelimiter #(
-        DELIMITER: 8'h2D, // ASCII '-'
+    inst parser: ParseNumbers #(
+        BYTES              ,
+        COUNT      : 2     ,
+        MAX_DIGITS : DIGITS,
+        SEPARATOR  : 8'h2D , // '-'
+        OUTPUT_BITS: 64    ,
     ) (
-        i_available            ,
-        i_data                 ,
-        o_index    : dash_index,
-        o_match    : dash_match,
+        i_available          ,
+        i_data               ,
+        o_consumed : consumed,
+        o_valid    : valid   ,
+        o_values   : values  ,
     );
-
-    inst newline: FindDelimiter #(
-        DELIMITER: 8'h0A, // ASCII '\n'
-    ) (
-        i_available               ,
-        i_data                    ,
-        o_index    : newline_index,
-        o_match    : newline_match,
-    );
-
-    inst digits_extractor_a: DigitsExtractor #(
-        BYTES   ,
-        DIGITS  ,
-    ) (
-        i_data                 ,
-        i_digits   : n_digits_a,
-        i_lsb_index: index_a   ,
-        o_value    : digits_a  ,
-    );
-
-    inst digits_extractor_b: DigitsExtractor #(
-        BYTES   ,
-        DIGITS  ,
-    ) (
-        i_data                 ,
-        i_digits   : n_digits_b,
-        i_lsb_index: index_b   ,
-        o_value    : digits_b  ,
-    );
-
-    inst combiner_a: DigitCombiner #(
-        DIGITS  ,
-    ) (
-        i_digits: digits_a,
-        o_value : o_start ,
-    );
-
-    inst combiner_b: DigitCombiner #(
-        DIGITS  ,
-    ) (
-        i_digits: digits_b,
-        o_value : o_end   ,
-    );
-
-    always_ff {
-        if_reset {
-            state = State::Parse;
-
-        } else {
-            if state == State::Parse && newline_match && newline_index == 0 {
-                state = State::Done;
-            }
-        }
-    }
-
-    // Determine number of digits and their positions
-    always_comb {
-        n_digits_a = 0;
-        n_digits_b = 0;
-
-        index_a = 0;
-        index_b = 0;
-
-        let dash_digits: logic<DIGIT_LEN> = dash_index as DIGIT_LEN;
-
-        if dash_match {
-            n_digits_a = dash_digits;
-            n_digits_b = i_available as DIGIT_LEN;
-
-            if dash_index != 0 {
-                index_a = dash_index[DATA_IDX_BITS - 1:0] - 1 as DATA_IDX_BITS;
-            }
-
-            if newline_match {
-                n_digits_b = newline_index as DIGIT_LEN;
-
-                if newline_index != 0 {
-                    index_b = newline_index[DATA_IDX_BITS - 1:0] - 1 as DATA_IDX_BITS;
-                }
-            }
-
-            // n_digits_b = n_digits_b - dash_index - 1
-            n_digits_b -= dash_digits - 1 as DIGIT_LEN;
-        }
-    }
 
     // Output signals
     always_comb {
-        o_consumed = 0;
-        o_finished = state == State::Done;
-        o_valid    = !o_finished && newline_match && dash_match;
+        // Halt once we hit the double newline (first is consumed)
+        o_done = i_available != '0 && i_data[0] == 8'h0A; // '\n'
 
-        if !i_busy && !o_finished && newline_match {
-            o_consumed = newline_index + 1;
+        o_start = values[0];
+        o_end   = values[1];
+        o_valid = valid && !o_done;
+
+        o_consumed = 0;
+
+        if !i_busy {
+            o_consumed = consumed;
         }
     }
 }
@@ -208,10 +122,10 @@ module Day05Solver (
     clk: input clock,
     rst: input reset,
 
-    i_end     : input logic<64>,
-    i_finished: input logic    ,
-    i_start   : input logic<64>,
-    i_valid   : input logic    ,
+    i_done : input logic    ,
+    i_end  : input logic<64>,
+    i_start: input logic<64>,
+    i_valid: input logic    ,
 
     o_answer  : output logic<64>,
     o_busy    : output logic    ,
@@ -250,68 +164,22 @@ module Day05Solver (
     var count_mask        : logic<MAX_RANGES>;
     var answer            : logic<64>        ;
 
-    // Overlap detection: ranges overlap or touch if end1+1 >= start2 AND end2+1 >= start1
-    always_comb {
-        for i: u32       in 0..MAX_RANGES {
-            let slot_end_plus1   : logic<64> = ranges_end[i] + 1;
-            let cur_end_plus1    : logic<64> = cur_end + 1;
-            let overlaps_or_touch: logic     = (slot_end_plus1 >= cur_start) && (cur_end_plus1 >= ranges_start[i]);
-            overlap_mask[i]   = occupied[i] && scan_mask[i] && overlaps_or_touch;
-        }
-    }
-
-    // Priority encoder: first overlapping slot
-    always_comb {
-        first_overlap_idx = 0;
-        has_overlap       = 0;
-        for i: u32 in 0..MAX_RANGES {
-            if overlap_mask[i] && !has_overlap {
-                first_overlap_idx = i[6:0];
-                has_overlap       = 1;
-            }
-        }
-    }
-
-    // Priority encoder: first empty slot
-    always_comb {
-        first_empty_idx = 0;
-        has_empty       = 0;
-        for i: u32 in 0..MAX_RANGES {
-            if !occupied[i] && !has_empty {
-                first_empty_idx = i[6:0];
-                has_empty       = 1;
-            }
-        }
-    }
-
-    // Priority encoder: first occupied slot (for counting)
-    always_comb {
-        first_occupied_idx = 0;
-        has_occupied       = 0;
-        for i: u32 in 0..MAX_RANGES {
-            if count_mask[i] && !has_occupied {
-                first_occupied_idx = i[6:0];
-                has_occupied       = 1;
-            }
-        }
-    }
-
     always_ff {
         if_reset {
             state        = State::Idle;
-            occupied     = 0;
-            cur_start    = 0;
-            cur_end      = 0;
-            scan_mask    = 0;
-            count_mask   = 0;
-            answer       = 0;
-            ranges_start = '{default: 0};
-            ranges_end   = '{default: 0};
+            occupied     = '0;
+            cur_start    = '0;
+            cur_end      = '0;
+            scan_mask    = '0;
+            count_mask   = '0;
+            answer       = '0;
+            ranges_start = '{default: '0};
+            ranges_end   = '{default: '0};
 
         } else {
             case state {
                 State::Idle: {
-                    if i_finished {
+                    if i_done {
                         state = State::CountInit;
 
                     } else if i_valid {
@@ -333,11 +201,11 @@ module Day05Solver (
                 State::MergeOne: {
                     let idx: logic<7> = first_overlap_idx;
 
-                    if ranges_start[idx] <: cur_start {
+                    if ranges_start[idx] <= cur_start {
                         cur_start = ranges_start[idx];
                     }
 
-                    if ranges_end[idx] >: cur_end {
+                    if ranges_end[idx] >= cur_end {
                         cur_end = ranges_end[idx];
                     }
 
@@ -385,6 +253,52 @@ module Day05Solver (
         }
     }
 
+    // Overlap detection: ranges overlap or touch if end1+1 >= start2 AND end2+1 >= start1
+    always_comb {
+        for i: u32       in 0..MAX_RANGES {
+            let slot_end_plus1   : logic<64> = ranges_end[i] + 1;
+            let cur_end_plus1    : logic<64> = cur_end + 1;
+            let overlaps_or_touch: logic     = (slot_end_plus1 >= cur_start) && (cur_end_plus1 >= ranges_start[i]);
+            overlap_mask[i]   = occupied[i] && scan_mask[i] && overlaps_or_touch;
+        }
+    }
+
+    // Priority encoder: first overlapping slot
+    always_comb {
+        first_overlap_idx = 0;
+        has_overlap       = 0;
+        for i: u32 in 0..MAX_RANGES {
+            if overlap_mask[i] && !has_overlap {
+                first_overlap_idx = i[6:0];
+                has_overlap       = 1;
+            }
+        }
+    }
+
+    // Priority encoder: first empty slot
+    always_comb {
+        first_empty_idx = 0;
+        has_empty       = 0;
+        for i: u32 in 0..MAX_RANGES {
+            if !occupied[i] && !has_empty {
+                first_empty_idx = i[6:0];
+                has_empty       = 1;
+            }
+        }
+    }
+
+    // Priority encoder: first occupied slot (for counting)
+    always_comb {
+        first_occupied_idx = 0;
+        has_occupied       = 0;
+        for i: u32 in 0..MAX_RANGES {
+            if count_mask[i] && !has_occupied {
+                first_occupied_idx = i[6:0];
+                has_occupied       = 1;
+            }
+        }
+    }
+
     always_comb {
         o_answer   = answer;
         o_busy     = state != State::Idle && state != State::Done;
@@ -407,9 +321,10 @@ embed (inline) sv{{{
         logic clk, rst;
         longint cycle_count;
 
-        logic [BYTES-1:0][7:0] i_data;
         logic [IDX_BITS-1:0] i_available;
         logic [IDX_BITS-1:0] o_consumed;
+        logic [BYTES-1:0][7:0] i_data;
+        logic i_eof;
         logic o_finished;
         logic [63:0] o_answer;
 
@@ -418,8 +333,9 @@ embed (inline) sv{{{
         ) dut (
             .clk(clk),
             .rst(rst),
-            .i_data(i_data),
             .i_available(i_available),
+            .i_data(i_data),
+.            i_eof(i_eof),
             .o_consumed(o_consumed),
             .o_finished(o_finished),
             .o_answer(o_answer)

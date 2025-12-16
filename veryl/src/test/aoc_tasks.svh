@@ -28,6 +28,7 @@ task aoc_init();
 
     // Initialize data signals
     i_available = 0;
+    i_eof = 0;
     for (i = 0; i < $size(i_data); i++) begin
         i_data[i] = 8'h00;
     end
@@ -94,7 +95,11 @@ task aoc_run_test(
         cycles_taken++;
 
         // Shift out consumed bytes and refill from file
-        if (consumed_int > 0 && consumed_int <= bytes_in_buffer) begin
+        // Clamp consumed to bytes_in_buffer (DUT may request more than available)
+        if (consumed_int > bytes_in_buffer)
+            consumed_int = bytes_in_buffer;
+
+        if (consumed_int > 0) begin
             for (i = 0; i < $size(i_data); i++) begin
                 if (i + consumed_int < $size(i_data))
                     i_data[i] = i_data[i + consumed_int];
@@ -113,6 +118,9 @@ task aoc_run_test(
 
             i_available = bytes_in_buffer[$bits(i_available)-1:0];
         end
+
+        // Update EOF flag - buffer empty and file exhausted
+        i_eof = (i_available == 0) && $feof(aoc_fd);
     end
 
     $fclose(aoc_fd);
