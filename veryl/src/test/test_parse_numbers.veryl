@@ -146,11 +146,9 @@ embed (inline) sv{{{
 
             #10;
             $display("\n=== Results: %0d passed, %0d failed ===\n", pass_count, fail_count);
-
             if (fail_count > 0) begin
                 $error("Some tests failed!");
             end
-
             $finish;
         end
     endmodule

@@ -23,8 +23,8 @@ The hardware implementation is designed to solve the **second part** of each day
 |  [5][p05] | Cafeteria           |       [05][s05]       |  ⚡  | [05][v05] |     57 µs |    7.3 µs |        1.0 µs |      7.3 |
 |  [6][p06] | Trash Compactor     |       [06][s06]       |  ⚡  | [06][v06] |     14 µs |     13 µs |        22 µs¹ |      0.6 |
 |  [7][p07] | Laboratories        |       [07][s07]       |  ⚡  | [07][v07] |    8.0 µs |    8.0 µs |        853 ns |      9.4 |
-|  [8][p08] | Playground          |       [08][s08]       |  🌱  | [08][v08] |     10 ms |     10 ms |        179 µs |       56 |
-|           |                     | &nbsp;[08][s08_fast]² |  ⚡  | [08][v08] |    501 µs |    1.2 ms |        179 µs |      2.8 |
+|  [8][p08] | Playground          |       [08][s08]       |  🌱  | [08][v08] |     10 ms |     10 ms |       161 µs⁴ |       62 |
+|           |                     | &nbsp;[08][s08_fast]² |  ⚡  | [08][v08] |    501 µs |    1.2 ms |       161 µs⁴ |      3.1 |
 |  [9][p09] | Movie Theater       |       [09][s09]       |  ⚡  |     -     |    123 µs |    9.6 ms |             - |        - |
 | [10][p10] | Factory             |       [10][s10]       |  🌱  |     -     |    458 µs |   9.4 ms³ |             - |        - |
 | [11][p11] | Reactor             |       [11][s11]       |  ⚡  |     -     |     45 µs |     73 µs |             - |        - |
@@ -42,6 +42,8 @@ _Rust benchmarked on an AMD Ryzen 9 9950X (5.7 GHz) using Windows 11_
 <i>² A more complex implementation. Improves cache locality (SoA), SIMD generation, uses bounded heaps and <a href="https://en.wikipedia.org/wiki/Prim%27s_algorithm">Prim's Algorithm</a>. I can't take credit for this one.</i>
 <br />
 <i>³ Solves a constrained optimisation problem (minimise ∑ x[i], s.t. Ax = b) using <a href="https://github.com/Specy/microlp">microlp</a>.</i>
+<br />
+<i>⁴ Simulated with 16 workers and queue depth of 64, increasing parameters can further improve throughput.</i>
 </sub>
 
 ## Usage
