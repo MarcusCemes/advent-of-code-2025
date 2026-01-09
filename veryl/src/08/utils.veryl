@@ -1,10 +1,16 @@
 
-
 /// Shift-register style rolling window to control worker compare/set signals.
-/// Each worker can either be idle (00), set (01) or compare (10). The initial
-/// state is that worker 0 is in "set" mode, others are idle. With each `i_enable`
-/// clock cycle, the "set" signal propagates to the next worker, and the previous
-/// worker transitions from "set" to a permanent "compare" state.
+///
+/// Controls which worker receives the reference vector (set signal) and which
+/// workers compute distances (compare signal) during the broadcast phase.
+///
+/// Each worker can be in one of three states:
+///   - Idle (b00): Not participating in current stride
+///   - Set (b01): Latching the reference vector for this stride
+///   - Compare (b10): Computing distance against reference
+///
+/// This creates a diagonal pattern where worker i compares against all workers > i,
+/// implementing the strided pair distribution.
 module Day08ShiftWindow #(
     param SIZE: u32 = 4,
 ) (
@@ -39,6 +45,12 @@ module Day08ShiftWindow #(
     }
 }
 
+/// Tracks the top-3 largest component sizes for MST weight calculation
+///
+/// Maintains a sorted list of the 3 largest values seen via insertion sort.
+/// Used by UnionFind to track the largest connected components.
+///
+/// The answer for Part 1 is the product of the 3 largest component sizes.
 module Day08TopCounter #(
     param SIZE: u32 = 1024,
 ) (
@@ -76,6 +88,22 @@ module Day08TopCounter #(
     }
 }
 
+/// Dual-port RAM storage for 3D vectors with automatic indexing
+///
+/// Stores up to SIZE 3D vectors (each 3x17 bits = 51 bits, packed into 64-bit words).
+/// Provides two independent read ports for simultaneous access to vector pairs.
+///
+/// Write port (port A):
+///   - Automatically increments write address on each i_push
+///   - Tracks total count in o_length
+///
+/// Read ports (ports A and B):
+///   - Simultaneous independent reads via i_addr_a and i_addr_b
+///   - 1-cycle read latency (registered outputs)
+///   - Unpacks 64-bit words into logic<3, 17> vectors
+///
+/// This dual-port design is critical for throughput: orchestrator can read
+/// two vectors per cycle to broadcast to all workers simultaneously.
 module Day08VectorStorage #(
     param DIM_BITS: u32 = 17  ,
     param DIMS    : u32 = 3   ,

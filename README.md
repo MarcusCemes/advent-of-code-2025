@@ -39,12 +39,34 @@ _Rust benchmarked on an AMD Ryzen 9 9950X (5.7 GHz) using Windows 11_
 <sub>
 <i>¹ Limited by input bandwidth (1 B/tick = 1 GB/s @ 1 GHz).</i>
 <br />
-<i>² A more complex implementation. Improves cache locality (SoA), SIMD generation, uses bounded heaps and <a href="https://en.wikipedia.org/wiki/Prim%27s_algorithm">Prim's Algorithm</a>. I can't take credit for this one.</i>
+<i>² Improves cache locality (SoA), SIMD generation, uses bounded heaps and <a href="https://en.wikipedia.org/wiki/Prim%27s_algorithm">Prim's Algorithm</a>. I can't take credit for this one.</i>
 <br />
 <i>³ Solves a constrained optimisation problem (minimise ∑ x[i], s.t. Ax = b) using <a href="https://github.com/Specy/microlp">microlp</a>.</i>
 <br />
 <i>⁴ Simulated with 16 workers and queue depth of 64, increasing parameters can further improve throughput.</i>
 </sub>
+
+## Design Deep Dive
+
+### Day 8: Playground - Parallel K-Smallest Selection
+
+Computes the K shortest Manhattan distances between M junction boxes in 3D space using N parallel workers with bounded heaps. C(M, 2) Euclidean distance computations are required, for M=1000 this results in 499,500 pairs. The hardware design aims to maximise throughput by parallelising distance computations across workers and minimising memory usage by broadcasting vector data from shared dual-port RAM over a bus.
+
+**Architecture:**
+
+```
+Input → Dual-Port RAM → Orchestrator (broadcasts pairs)
+                              ↓
+        ┌─────┬─────┬─────┬────────┬─────┐
+        W0    W1    W2    ...      W15     (strided workers)
+        └─────┴─────┴─────┴────────┴─────┘
+                              ↓
+              Min-finder → Union-Find → Answer
+```
+
+Each worker computes Manhattan distances between a unique reference coordinate i and all other coordinates j broadcasted over a shared bus. The orchestrator ensures each worker processes distinct pairs with a shift-register mask to set/enable workers. Each worker manages its own FIFO queue and bounded min-heap of the K smallest distances it has seen so far. If any worker's queue is full, the orchestrator must stall further broadcasts until all workers can accept the next vector. When everything is running at full speed, N unique pair evaluations are completed every cycle!
+
+Both hardware and software implementations are effectively O(M^2) in time complexity due to the need to evaluate all pairs. The hardware design leverages worker parallelism to greatly increase distance computation throughput, however, is still limited by the complexity of re-heaping operations for each worker's bounded heap. While the software implementation does not parallelise, the cache-friendly memory layout and CPU optimisations (branch prediction, out-of-order execution, SIMD) help reduce constant factors.
 
 ## Usage
 
@@ -96,9 +118,9 @@ veryl test src/day_xx.veryl src/helpers.veryl
 
 To simulate with your own input:
 
-1. Create a `data/input/day_xx.txt` file
-2. Modify `Veryl.toml` to include it instead of the example file
-3. Change the `EXPECTED` constant in the day's inline test
+1. Place your input file in `veryl/data/input/` (e.g., `day_08.txt`)
+2. Update `Veryl.toml` to include your file in the `[test]` section's `include_files`
+3. Change the `EXPECTED` constant in the day's inline test to match your expected answer
 4. Run `veryl test --verbose`
 
 ## Acknowledgments

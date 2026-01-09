@@ -1,3 +1,18 @@
+/// Day 08: Playground - K-smallest Manhattan distances with MST weight calculation
+///
+/// Solves the problem of finding the K shortest Manhattan distances between N junction
+/// boxes in 3D space using a streaming parallel architecture with bounded heaps.
+///
+/// Architecture:
+///   Input Parser -> Decoder -> Orchestrator -> Workers[0..WORKERS-1] -> Union-Find -> Answer
+///
+/// Key parameters:
+///   - WORKERS: Number of parallel workers
+///   - QUEUE_DEPTH: Depth of each worker's FIFO input queue
+///   - SIZE: Heap size, must be power of two, larger than CONNECTIONS
+///   - CONNECTIONS: Number of shortest distances to keep
+///
+/// Performance at N=1000, K=1000: ~161µs @ 1GHz (3.1x faster than optimized Rust)
 pub module Day08 #(
     param BYTES      : u32 = 32 ,
     param CONNECTIONS: u32 = 10 ,
@@ -60,6 +75,9 @@ pub module Day08 #(
     );
 }
 
+/// Decoder for input vectors - parses 3D coordinate tuples from input stream
+///
+/// Converts ASCII input like "x,y,z\n" into structured 3D vectors (logic<3, 17>).
 module Day08Decoder #(
     param BYTES      : u32 = 32,
     param COUNT      : u32 = 3 ,

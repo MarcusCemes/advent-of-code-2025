@@ -1,3 +1,27 @@
+/// Union-Find data structure for computing MST weight from K shortest edges
+///
+/// Implements Kruskal's algorithm to determine which of the K shortest distances
+/// are actually needed to connect N junction boxes into a minimum spanning tree.
+///
+/// 1. Init: Initialize all nodes as self-rooted trees of size 1
+///
+/// 2. Idle -> FindRoots: For each edge (a,b):
+///    - Follow parent pointers to find root(a) and root(b)
+///    - Push path nodes into FIFOs for later compression
+///    - If roots equal, edge would create cycle (skip it)
+///
+/// 3. Union: Merge the two trees
+///    - Attach smaller tree to larger tree (union by size)
+///    - Update both roots to point to winner
+///
+/// 4. PathCompress: Flatten both paths
+///    - Pop all nodes from FIFOs and point them directly to the final root
+///
+/// 5. Count: After all K edges processed, scan RAM for root nodes
+///    - Track the 3 largest component sizes
+///
+/// The dual-port RAM enables simultaneous path traversal for both edge endpoints,
+/// and parallel updates during union/compression phases.
 module Day08UnionFind #(
     param SIZE: u32 = 1024,
 ) (
@@ -152,6 +176,7 @@ module Day08UnionFind #(
                     if cursor == SIZE - 1 {
                         cursor = '0;
                         state  = State::Idle;
+
                     } else {
                         cursor += 1;
                     }
@@ -160,6 +185,7 @@ module Day08UnionFind #(
                 State::Idle: {
                     if i_done {
                         state = State::Count;
+
                     } else if start_valid {
                         source_a  = i_a;
                         source_b  = i_b;
@@ -189,6 +215,7 @@ module Day08UnionFind #(
                             // If the roots are the same, they are already connected
                             if current_a == current_b {
                                 state = State::Idle;
+
                             } else {
                                 larger_root = if stored_size_a >= stored_size_b ? current_a : current_b;
                                 state       = State::Union;
@@ -210,6 +237,7 @@ module Day08UnionFind #(
                 State::Count: {
                     if cursor_end {
                         state = State::Done;
+
                     } else {
                         cursor += 1;
                     }

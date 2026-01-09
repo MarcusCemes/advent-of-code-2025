@@ -1,3 +1,22 @@
+/// Parallel worker for computing and filtering Manhattan distances
+///
+/// Each worker operates on a strided subset of vector pairs.
+/// This design avoids any need for inter-worker communication or arbitration.
+///
+/// Architecture (two-stage pipeline):
+///   1. FIFO queue: Buffers incoming distance computations (depth = QUEUE_DEPTH)
+///   2. Bounded binary heap: Maintains K smallest distances seen
+///
+/// Insert mode:
+///   - Receives broadcast vector pairs via i_bus and i_idx
+///   - i_set_ref: Latch vector A as reference for this stride
+///   - i_compare: Compute distance(A, B) and push to queue
+///   - Queue drains into heap when heap is idle
+///   - Heap immediately rejects if full and distance < heap max
+///
+/// Drain mode:
+///   - Waits for queue to empty, then switches heap to drain mode
+///   - Sorts to a max-heap and pops minimum distance on i_pop
 module Day08Worker #(
     param DIM_BITS   : u32 = 17  ,
     param INDEX      : u32 = 0   ,
